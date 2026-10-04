@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TENGERI | 몽골 원조 샤머니즘 AI 사주</title>
+    <style>
+        :root {
+            --bg-color: #0b0c10;
+            --card-bg: #1f2833;
+            --text-color: #c5c6c7;
+            --accent-color: #d4af37; /* 황동/고대 금색 */
+            --accent-glow: #ff4500;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Pretendard', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* BGM 버튼 */
+        .audio-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        /* Hero 섹션 */
+        .hero {
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(11, 12, 16, 1)), 
+                        url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1920&q=80') center/cover;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        /* 폼 컨테이너 */
+        .form-container {
+            max-width: 500px;
+            margin: -50px auto 50px auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--accent-color);
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #45a29e;
+            background: #0b0c10;
+            color: #fff;
+            box-sizing: border-box;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #d4af37, #ff4500);
+            border: none;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.02);
+        }
+
+        /* 티저 및 결제 유도 (결과 창) */
+        .result-preview {
+            display: none;
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--accent-color);
+        }
+
+        .blurred-content {
+            filter: blur(6px);
+            user-select: none;
+            margin-top: 15px;
+        }
+
+        .paywall-overlay {
+            text-align: center;
+            margin-top: -100px;
+            position: relative;
+            z-index: 10;
+            background: rgba(11, 12, 16, 0.9);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--accent-glow);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 흐미 BGM 조절 버튼 -->
+    <button class="audio-control" onclick="toggleAudio()">🔊 초원의 울림 (Khoomei BGM)</button>
+    
+    <!-- 흐미/마두금 음원 연동 (샘플 오디오링크) -->
+    <audio id="bgm" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- 메인 Hero -->
+    <section class="hero">
+        <h1>TENGERI</h1>
+        <p>태초의 푸른 하늘 "텡그리"의 기운을 받아<br>당신의 운명에 각인된 사주의 비책을 밝힙니다.</p>
+    </section>
+
+    <!-- 사주 입력 폼 -->
+    <div class="form-container">
+        <form id="sajuForm">
+            <div class="form-group">
+                <label for="name">이름 (성함)</label>
+                <input type="text" id="name" placeholder="홍길동" required>
+            </div>
+            <div class="form-group">
+                <label for="birth">생년월일 및 태어난 시간</label>
+                <input type="datetime-local" id="birth" required>
+            </div>
+            <div class="form-group">
+                <label for="gender">성별</label>
+                <select id="gender">
+                    <option value="male">남성</option>
+                    <option value="female">여성</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="concern">가장 해소하고 싶은 고민</label>
+                <select id="concern">
+                    <option value="wealth">재물 및 사업운</option>
+                    <option value="love">연애 및 인연운</option>
+                    <option value="career">취업 및 직장운</option>
+                    <option value="health">건강 및 액운 방지</option>
+                </select>
+            </div>
+            <button type="submit" class="submit-btn">텡그리의 신탁 받기</button>
+        </form>
+    </div>
+
+    <!-- 결과 티저 & 결제 유도 -->
+    <div class="result-preview" id="resultPreview">
+        <h2 style="color: var(--accent-color); text-align: center;">[신탁의 서막]</h2>
+        <p id="teaserText">loading...</p>
+
+        <!-- 블러 처리된 전체 사주 내용 -->
+        <div class="blurred-content">
+            <p>당신의 2026년 대운은 북서쪽에서 불어오는 강한 바람과 함께 찾아옵니다. 재물운의 흐름은 금전의 화기를 다스리는 수(水)의 기운이 부족하여 3월과 8월 사이에 큰 지출이 발생할 수 있으나...</p>
+            <p>타고난 샤머니즘적 수호령은 늑대의 기운을 품고 있으며, 결단력을 내릴 때 사업적 성공이 극대화됩니다. 특히 조심해야 할 상극의 인연은...</p>
+        </div>
+
+        <!-- 결제 박스 -->
+        <div class="paywall-overlay">
+            <h3 style="color: #ff4500;">🔒 전체 텡그리 사주 풀이 열람하기</h3>
+            <p>당신의 인생을 바꿀 대운 해석과 액운을 막는 몽골 샤먼의 비책이 준비되었습니다.</p>
+            <button class="submit-btn" style="margin-top: 15px;" onclick="requestPayment()">9,900원으로 전체 신탁 열람하기</button>
+        </div>
+    </div>
+
+    <script>
+        // Audio Toggle
+        const bgm = document.getElementById('bgm');
+        let isPlaying = false;
+
+        function toggleAudio() {
+            if (isPlaying) {
+                bgm.pause();
+                document.querySelector('.audio-control').innerText = '🔇 음악 켜기';
+            } else {
+                bgm.play();
+                document.querySelector('.audio-control').innerText = '🔊 초원의 울림 (Khoomei BGM)';
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // Form Submit Handler
+        document.getElementById('sajuForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // 입력값 받기
+            const name = document.getElementById('name').value;
+            const concern = document.getElementById('concern').options[document.getElementById('concern').selectedIndex].text;
+
+            // 티저 텍스트 세팅
+            document.getElementById('teaserText').innerText = 
+                `${name} 님의 사주는 '푸른 초원을 달리는 야생마'의 형상을 띄고 있습니다. 특히 ${concern}에 대한 강한 기운이 형성되어 있으나, 이를 막아서는 상극의 기운 또한 또렷하게 관측됩니다.`;
+
+            // 결과창 표시
+            document.getElementById('resultPreview').style.display = 'block';
+            window.scrollTo({
+                top: document.getElementById('resultPreview').offsetTop - 50,
+                behavior: 'smooth'
+            });
+        });
+
+        // PG 결제 연동 함수 (포트원/토스페이먼츠 연동 구역)
+        function requestPayment() {
+            alert('결제 모듈(토스페이먼츠 / 포트원 API)을 연동하는 단계입니다.');
+            // 결제 성공 시 Gemini API 프롬프트 연동 결과 페이지로 이동 처리
+        }
+    </script>
+</body>
+</html>
